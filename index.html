@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#09070a">
+<title>Обитель Агриппины</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Neucha&family=PT+Sans+Narrow:wght@400;700&family=Ruslan+Display&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="view"></canvas>
+<canvas id="ov"></canvas>
+<div id="redwash"></div>
+<div id="fx"></div>
+<div id="grain"></div>
+<div id="touch"></div>
+
+<div id="hud" hidden>
+  <div id="obj"><small>Цель</small><span id="objText"></span></div>
+  <div id="topR">
+    <div id="inv"></div>
+    <div id="bat" aria-label="Заряд фонаря"><div id="batFill"></div></div>
+    <button id="pauseBtn" aria-label="Пауза">II</button>
+  </div>
+  <div id="ritual" hidden><span>Держи её в луче</span><div class="bar"><div id="ritFill"></div></div></div>
+  <div id="prompt"></div>
+  <div id="toast"></div>
+  <div id="stick"><div id="knob"></div></div>
+  <div id="help"><p>← веди пальцем слева, чтобы идти</p><p>справа — смотреть по сторонам →</p></div>
+  <button id="lampBtn" aria-label="Фонарь вкл/выкл"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M9 2h6l-1 6h-4zM10 8h4v3l-1 11h-2L10 11z" fill="currentColor"/><path d="M5 3l2 2M19 3l-2 2M12 0v1" stroke="currentColor" stroke-width="1.5"/></svg></button>
+  <button id="act">Рука</button>
+</div>
+
+<section id="hide" hidden>
+  <div class="slats"></div>
+  <div class="hideCtl">
+    <div class="breath"><span>Дыхание</span><div class="bar"><div id="breathFill"></div></div></div>
+    <button id="holdBtn">Задержать дыхание</button>
+    <button id="leaveBtn" class="ghostbtn">Выйти</button>
+  </div>
+</section>
+
+<section id="menu" class="layer">
+  <h1>ОБИТЕЛЬ</h1>
+  <p class="sub">сестры Агриппины</p>
+  <p class="warn">Надень наушники и выключи беззвучный режим. В игре громкие скримеры и резкие вспышки. Прохождение — около 15–20 минут.</p>
+  <button class="big" id="startBtn">Войти в обитель</button>
+  <p class="warn" id="orientHint">Удобнее играть, повернув телефон горизонтально.</p>
+</section>
+
+<section id="comic" class="layer" hidden>
+  <canvas id="cv"></canvas>
+  <div class="cap">
+    <p id="capText"></p>
+    <div class="crow"><span id="tapHint">Нажми, чтобы листать</span><button class="ghostbtn" id="skipBtn">Пропустить</button></div>
+  </div>
+</section>
+
+<section id="note" class="layer dim" hidden>
+  <div class="paper" id="paper"><h3 id="noteTitle"></h3><div id="noteBody"></div><button class="close" id="noteClose">Закрыть ✕</button></div>
+</section>
+
+<section id="lock" class="layer dim" hidden>
+  <div class="lockbox">
+    <h3>Кодовый замок библиотеки</h3>
+    <div class="wheels" id="wheels"></div>
+    <div class="row"><button class="big" id="lockOk">Открыть</button><button class="ghostbtn" id="lockBack">Отойти</button></div>
+  </div>
+</section>
+
+<section id="photo" class="layer dim" hidden>
+  <div class="lockbox">
+    <h3>Разбитый портрет</h3>
+    <p class="hint">Нажимай на осколки, чтобы повернуть их</p>
+    <canvas id="photoCv" width="330" height="330"></canvas>
+    <button class="ghostbtn" id="photoBack">Отойти</button>
+  </div>
+</section>
+
+<section id="bells" class="layer dim" hidden>
+  <div class="lockbox">
+    <h3>Колокольня</h3>
+    <p class="hint" id="bellMsg">Сыграй её колыбельную: пять ударов.</p>
+    <div class="ropes" id="ropes"></div>
+    <div class="seq" id="bellSeq"></div>
+    <div class="row"><button class="ghostbtn" id="musicBox">Шкатулка ♪</button><button class="ghostbtn" id="bellsBack">Отойти</button></div>
+  </div>
+</section>
+
+<section id="pause" class="layer dim" hidden>
+  <div class="menuCol">
+    <h2>Пауза</h2>
+    <button class="big" id="resumeBtn">Продолжить</button>
+    <button class="ghostbtn" id="hintBtn">Подсказка</button>
+    <p id="hintText"></p>
+    <button class="ghostbtn" id="muteBtn">Звук: включён</button>
+    <button class="ghostbtn" id="restartBtn">Начать заново</button>
+  </div>
+</section>
+
+<section id="end" class="layer" hidden>
+  <h2>Конец?</h2>
+  <p>Обитель отпустила вас. Но колыбельная из колокольни теперь звучит в машине.</p>
+  <p class="stats" id="stats"></p>
+  <button class="big" id="againBtn">Сыграть ещё раз</button>
+</section>
+
+<canvas id="scare"></canvas>
+<div id="fade"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/textures.js"></script>
+<script src="js/map.js"></script>
+<script src="js/scares.js"></script>
+<script src="js/render.js"></script>
+<script src="js/comic.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
